@@ -19,7 +19,7 @@ def difference_df(df: pd.DataFrame, timeStamps: str, measurements: list[str]) ->
 
     for measurement in measurements:
         # Calculate derivative estimates
-        der_df['derivative_' + measurement] = df[measurement].diff()
+        der_df['derivative_' + measurement + '_d'] = df[measurement].diff()
     
     df = df.drop('time_diff', axis =  1)
 
@@ -43,7 +43,7 @@ def double_derivative_from_df(df: pd.DataFrame, timeStamps: str, measurements: l
 
     # Calculate derivative estimates
     for measurement in measurements:
-        dder_df['double_derivative_' + measurement] = df[measurement].diff() / (divmod(df['time_diff'].dt.total_seconds(), 60)[0]**2)
+        dder_df['double_derivative_' + measurement + '_dd'] = df[measurement].diff() / (divmod(df['time_diff'].dt.total_seconds(), 60)[0]**2)
     
     df = df.drop('time_diff', axis=1)
     
@@ -65,7 +65,7 @@ def daily_accumulated_val_df(df: pd.DataFrame, timeStamps: str, measurements: li
 
     for measurement in measurements:
         # Calculate the integral value for each day
-        i_df['integral_' + measurement] = df.groupby('date')[measurement].cumsum()
+        i_df['integral_' + measurement + '_integral'] = df.groupby('date')[measurement].cumsum()
     
     df = df.drop('date', axis=1)
 
@@ -83,7 +83,7 @@ def daily_accumulated_val_squared_df(df: pd.DataFrame, timeStamps: str, measurem
 
     for measurement in measurements:
         # Calculate the integral value for each day
-        di_df['double_integral_' + measurement] = df.groupby('date')[measurement].cumsum()**2
+        di_df['double_integral_' + measurement + '_dintegral'] = df.groupby('date')[measurement].cumsum()**2
     
     df = df.drop('date', axis=1)
 
@@ -93,10 +93,10 @@ def time_data_from_df(df: pd.DataFrame, timestamps: str) -> pd.DataFrame:
     # Extracting components
     time_df = pd.DataFrame()
     df = df.copy()
-    time_df['day_of_year'] = df[timestamps].dt.dayofyear
-    time_df['month'] = df[timestamps].dt.month
-    #time_df['year'] = df[timestamps].dt.year
-    time_df['hour'] = df[timestamps].dt.hour
+    time_df['day_of_year:day'] = df[timestamps].dt.dayofyear
+    time_df['month:month'] = df[timestamps].dt.month
+    #time_df['year:year'] = df[timestamps].dt.year
+    time_df['hour:hour'] = df[timestamps].dt.hour
     return time_df
 
 
@@ -168,3 +168,11 @@ def shifted_values_24_h(y: pd.DataFrame, measurement: str)->pd.DataFrame:
     
     return df
 
+def merge_features(df: pd.DataFrame):
+    # Extract the part before ":" in column names
+    df.columns = df.columns.str.split(':').str[0]
+
+    # Group by modified column names and sum values
+    grouped_df = df.groupby(df.columns, axis=1).sum()
+
+    return grouped_df
