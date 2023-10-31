@@ -95,7 +95,7 @@ def time_data_from_df(df: pd.DataFrame, timestamps: str) -> pd.DataFrame:
     df = df.copy()
     time_df['day_of_year'] = df[timestamps].dt.dayofyear
     time_df['month'] = df[timestamps].dt.month
-    time_df['year'] = df[timestamps].dt.year
+    #time_df['year'] = df[timestamps].dt.year
     time_df['hour'] = df[timestamps].dt.hour
     return time_df
 
