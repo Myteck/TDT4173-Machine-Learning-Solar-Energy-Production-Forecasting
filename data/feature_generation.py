@@ -5,7 +5,7 @@ This is a helper library to generate features.
 import numpy as np
 import pandas as pd
 
-def derivative_from_df(df: pd.DataFrame, timeStamps: str, measurements: list[str]) -> pd.DataFrame:
+def difference_df(df: pd.DataFrame, timeStamps: str, measurements: list[str]) -> pd.DataFrame:
     """
     Adds a derivative column to the pandas dataframe. May be used to create time dependency.
     """
@@ -53,7 +53,7 @@ def double_derivative_from_df(df: pd.DataFrame, timeStamps: str, measurements: l
 
     return dder_df
 
-def integral_from_df(df: pd.DataFrame, timeStamps: str, measurements: list[str]) -> pd.DataFrame:
+def daily_accumulated_val_df(df: pd.DataFrame, timeStamps: str, measurements: list[str]) -> pd.DataFrame:
     
     i_df = pd.DataFrame()
     df = df.copy()
@@ -71,7 +71,7 @@ def integral_from_df(df: pd.DataFrame, timeStamps: str, measurements: list[str])
 
     return i_df
 
-def double_integral_from_df(df: pd.DataFrame, timeStamps: str, measurements: list[str]) -> pd.DataFrame:
+def daily_accumulated_val_squared_df(df: pd.DataFrame, timeStamps: str, measurements: list[str]) -> pd.DataFrame:
     
     di_df = pd.DataFrame()
     df = df.copy()
@@ -164,7 +164,7 @@ def min_max_scale(signal: np.array) -> np.array:
 def shifted_values_24_h(y: pd.DataFrame, measurement: str)->pd.DataFrame:
     df = pd.DataFrame()
     for i in range(1, 25):
-        df['n-' + str(i)] = y[measurement].shift(i)
+        df[measurement + 'n-' + str(i)] = y[measurement].shift(i)
     
     return df
 
