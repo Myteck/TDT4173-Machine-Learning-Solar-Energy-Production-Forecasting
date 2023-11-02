@@ -24,8 +24,7 @@ def difference_df(df: pd.DataFrame, timeStamps: str, measurements: list[str]) ->
     df = df.drop('time_diff', axis =  1)
 
     # Since the first element will result in a NaN, we must backfill this one.
-    der_df = der_df.interpolate(method='linear')
-    der_df = der_df.bfill()
+    der_df = der_df.interpolate(method='linear', limit_direction='both')
     
     return der_df
 
