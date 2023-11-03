@@ -49,7 +49,7 @@ def double_derivative_from_df(df: pd.DataFrame, timeStamps: str, measurements: l
     
     # Since the first element will result in a NaN, we must backfill this one.
     dder_df = dder_df.interpolate(method='linear')
-    dder_df = dder_df.fillna(method="backfill", axis=None)
+    dder_df = dder_df.bfill()
 
     return dder_df
 
