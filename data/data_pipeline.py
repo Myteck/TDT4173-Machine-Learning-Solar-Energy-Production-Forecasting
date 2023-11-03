@@ -86,7 +86,7 @@ def pred_data_processing(X_pred: pd.DataFrame, filter_list: list[str] = []) -> p
 
     
 
-    X_pred_new = pd.concat([X_pred, der_df, dder_df, int_df, dint_df, time_df], axis = "columns")
+    X_pred_new = pd.concat([X_pred, der_df, dder_df, dint_df, int_df, time_df], axis = "columns")
 
     if len(filter_list) > 0:
         X_pred_new = X_pred_new[filter_list]
