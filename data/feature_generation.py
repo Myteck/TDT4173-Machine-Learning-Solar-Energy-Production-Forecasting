@@ -1,3 +1,4 @@
+# Ikke burk denne versjonen!!
 """
 This is a helper library to generate features.
 """
@@ -36,19 +37,22 @@ def double_derivative_from_df(df: pd.DataFrame, timeStamps: str, measurements: l
     df = df.copy()
     # Sort DataFrame by timestamp
     df = df.sort_values(timeStamps) 
-
+    print("-----------------------")
     # Calculate time differences
     df['time_diff'] = df[timeStamps].diff()
+    print(df['time_diff'].isnan().sum().sum())
 
     # Calculate derivative estimates
     for measurement in measurements:
         dder_df['double_derivative_' + measurement + '_dd'] = df[measurement].diff() / (divmod(df['time_diff'].dt.total_seconds(), 60)[0]**2)
     
     df = df.drop('time_diff', axis=1)
+    print(df.isnan().sum().sum())
     
     # Since the first element will result in a NaN, we must backfill this one.
-    dder_df = dder_df.interpolate(method='linear')
-    dder_df = dder_df.fillna(method="backfill", axis=None)
+    dder_df = dder_df.interpolate(method='linear', limit_direction='both')
+    print(dder_df.isnan().sum().sum())
+    print("-----------------------")
 
     return dder_df
 
