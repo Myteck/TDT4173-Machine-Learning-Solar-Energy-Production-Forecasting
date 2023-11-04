@@ -12,6 +12,10 @@ import data_pipeline as dp
 from sklearn.preprocessing import MinMaxScaler
 from enum import Enum
  
+# TODO: ADD NICE MODEL SELECTIONS
+# TODO: ADD FILTERING TOOLS
+# TODO: ADD FREQUENCY GENERATION
+
 class learner:
   def __init__(self, file_paths: list[list[str]], features: list[str] = [], learning_algorithm: str = cb.CatBoostRegressor) -> None:
     self.files = files
@@ -61,7 +65,7 @@ def create_training_data(self):
     
     # ================= SCALING DATA================
     scaler = MinMaxScaler()
-    
+
     # Fit and transform the data
     X_train = scaler.fit_transform(X_train)
     X_test = scaler.transform(X_test)
@@ -69,14 +73,14 @@ def create_training_data(self):
     self.X_pred = scaler(X_pred)
     return None
 
-def fit_model(self):
+def fit_model(self) -> None:
     """
     Based on the selected model the class switches between what model is doing the learning. 
     """
 
+    #============ SHOULD BE PLACED WITHIN A LIST OF FUNCTIONS ===================#
     # Add a function that picks between different models, and processes the data based on this
     self.train_dataset = cb.Pool(self.X_train, self.y_train)
-    self.test_dataset = cb.Pool(self.X_test, self.y_test)
 
     self.model = cb.CatBoostRegressor(loss_function="MAE", logging_level='Silent')
 
@@ -87,14 +91,13 @@ def fit_model(self):
 
     self.model.grid_search(grid, train_dataset, verbose=False)
     
-    return None
 
 def get_performance(self) -> None:
     pred = self.model.predict(self.X_train)
     mae = (mean_absolute_error(y_test, pred))
     print("Mean Abs: {:.2f}".format(mae))
 
-def generate_predictions(self) -> None:
+def predict(self) -> None:
     unformated_pred = self.model.predict(self.X_train)
     pred = self._format_predictions(unformated_pred)
     self._save_predictions(pred)
@@ -116,8 +119,6 @@ def _save_predictions(pred: pd.DataFrame)->None:
     #Make the index and pv_measurement column into a csv file
     pred[["id", "pv_measurement"]].rename(columns={"id" : "id" , "pv_measurement" : "prediction"}).to_csv("model_pred.csv", index=False)
 
-def _predict():
-    return None
 
 
 
