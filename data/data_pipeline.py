@@ -23,7 +23,6 @@ def train_data_processing(X: pd.DataFrame, y: pd.DataFrame, filter_list: list[st
     dint_df = feat_gen.daily_accumulated_val_squared_df(X, timestamps, measurements)
     time_df = feat_gen.time_data_from_df(X, timestamps)
 
-
     X = pd.concat([X, der_df, dder_df, dint_df, int_df, time_df], axis = "columns")
 
     if len(filter_list) > 0:
@@ -89,9 +88,9 @@ def pred_data_processing(X_pred: pd.DataFrame, filter_list: list[str] = []) -> p
     X_pred_new = pd.concat([X_pred, der_df, dder_df, dint_df, int_df, time_df], axis = "columns")
 
     if len(filter_list) > 0:
-        X_pred_new = X_pred_new[filter_list]
+        X_pred_new = X_pred_new[filter_list + ['date_forecast']]
+        
     else:
-        X_pred_new = X_pred_new.drop("date_forecast", axis = 1)
         X_pred_new = X_pred_new.drop("date_calc", axis = 1)
 
     return X_pred_new
