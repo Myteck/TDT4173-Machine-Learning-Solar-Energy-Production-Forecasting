@@ -10,8 +10,123 @@ from sklearn.model_selection import train_test_split
 from sklearn.metrics import mean_absolute_error
 import data_pipeline as dp
 from sklearn.preprocessing import MinMaxScaler
+from enum import Enum
+ 
+class learner:
+  def __init__(self, file_paths: list[list[str]], features: list[str] = [], learning_algorithm: str = cb.CatBoostRegressor) -> None:
+    self.files = files
+    self.features = features
+    self.learning_algorithm = learning_algorithm
+
+def create_training_data(self):
+    list_y = []
+    list_X = []
+    list_X_pred = []
+   
+    for path in self.file_paths:
+        y = pd.read_parquet(path[0])
+        X_estimated = pd.read_parquet(path[1])
+        X_observed = pd.read_parquet(path[2])
+        X_pred = pd.read_parquet(path[3])
+
+        # =================  TEST DATA  ================
+        X_pred = dp.pred_data_processing(X_pred)
+        list_X_pred.append(X_pred)
+
+        # =================TRAINING DATA================
+        # Pre-process data
+        y = y.dropna()
+        X_estimated = X_estimated.drop("date_calc", axis = 1)
+        X = pd.concat([X_observed, X_estimated], axis = 0, ignore_index=True)
+        
+        # BETTER NAME
+        X, y= dp.train_data_processing(X, y)
+        
+        # ADD A FUNCTION TO GENERATE BUILDING FEATURE.
+
+        # Adding the datasets to the lists
+        list_y.append(y)
+        list_X.append(X)
+    
+    # Add all the lists together. However there is a need to add set
+    y = pd.concat(list_y, axis="rows")
+    X = pd.concat(list_X, axis="rows")
+
+    self.X_train, self.X_test, self.y_train, self.y_test = train_test_split(X, y, test_size=0.15, shuffle=True)
+
+    X_pred = pd.concat(list_X_pred)
+    
+    # ================= SCALING DATA================
+
+    scaler = MinMaxScaler()
+    # Fit and transform the data
+    X_train = scaler.fit_transform(X_train)
+    X_test = scaler.transform(X_test)
+
+    self.X_pred = scaler(X_pred)
+
+    return None
+def fit_model(self):
+    """
+    Add a set of models to pick from...
+    """
+    # Add a function that picks between different models, and processes the data based on this
+
+    self.train_dataset = cb.Pool(self.X_train, self.y_train)
+    self.test_dataset = cb.Pool(self.X_test, self.y_test)
+
+    self.model = cb.CatBoostRegressor(loss_function="MAE", logging_level='Silent')
+
+    grid = {'iterations': [100, 150, 200],
+            'learning_rate': [0.03, 0.1],
+            'depth': [2, 4, 6, 8],
+            'l2_leaf_reg': [0.2, 0.5, 1, 3]}
+    self.model.grid_search(grid, train_dataset, verbose=False)
+    
+    return None
+def get_performance(self) -> None:
+    pred = self.model.predict(self.X_train)
+    mae = (mean_absolute_error(y_test, pred))
+    print("Mean Abs: {:.2f}".format(mae))
+    return None
+
+def generate_predictions():
+    pred = self.model.predict(self.X_train)
+
+    return None
+def _format_predictions():
+    
+    to_be_submitted_index = pd.read_csv("test.csv")
+
+    # So we must resample based on the index wtf?
+    X_test_resampled = X_test_resampled.reset_index()
+
+    #convert the "time" column to datetime
+    to_be_submitted_index["time"] = pd.to_datetime(to_be_submitted_index["time"])
+    X_test_resampled = pd.merge(X_test_resampled, to_be_submitted_index, how='inner', left_on=['date_forecast', 'building'], right_on=["time", "location"])
+
+    #Make the index and pv_measurement column into a csv file
+    X_test_resampled[["id", "pv_measurement"]].rename(columns={"id" : "id" , "pv_measurement" : "prediction"}).to_csv("model_pred.csv", index=False)
+
+    return None
+def _save_predictions():
+    return None
+
+def _predict():
+    return None
+
+
+
+
+
 
 def create_learner(X: pd.DataFrame, y: pd.DataFrame, X_pred: pd.DataFrame):
+    # Should be split into several parts
+    # We want to merge all the different trainingsets into 1 large \
+
+    #
+
+
     X, y= dp.train_data_processing(X, y)
 
     # DO we get a day or the 
