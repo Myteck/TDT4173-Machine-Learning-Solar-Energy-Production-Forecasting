@@ -6,7 +6,7 @@ import feature_generation as feat_gen
 import data_processing as dat_proc
 import pandas as pd
 
-def train_data_processing(X: pd.DataFrame, y: pd.DataFrame, filter_list: list[str] = [], add_y_signal: bool = False):
+def train_data_processing(X: pd.DataFrame, y: pd.DataFrame, filter_list: list[str] = [], add_feedback: bool = False):
    
     # Removing NaN values. If there are missing values treat start and end points as beginning and end of a line.
     X = X.interpolate(method='linear', limit_direction = "both")
@@ -45,7 +45,7 @@ def train_data_processing(X: pd.DataFrame, y: pd.DataFrame, filter_list: list[st
     y = y.reset_index(drop = True)
     
     
-    if add_y_signal:
+    if add_feedback:
         # Removing datetime object column.
         y_features = y_BIG.drop('pv_measurement', axis=1)
         y_features = y_features.drop('time', axis=1)

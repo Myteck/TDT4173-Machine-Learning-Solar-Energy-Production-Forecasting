@@ -1,0 +1,11 @@
+,Model A,Model B,Model C
+0,direct_rad:W,sun_elevation:d,direct_rad:W
+1,sun_elevation:d,direct_rad:W,sun_elevation:d
+2,derivative_sun_azimuth:d_d,day_of_year:day,day_of_year:day
+3,total_cloud_cover:p,total_cloud_cover:p,derivative_sun_azimuth:d_d
+4,derivative_sun_elevation:d_d,derivative_direct_rad:W_d,t_1000hPa:K
+5,hour:hour,t_1000hPa:K,total_cloud_cover:p
+6,day_of_year:day,derivative_sun_azimuth:d_d,hour:hour
+7,derivative_direct_rad:W_d,month:month,derivative_t_1000hPa:K_d
+8,t_1000hPa:K,derivative_sun_elevation:d_d,derivative_direct_rad:W_d
+9,month:month,derivative_t_1000hPa:K_d,month:month
