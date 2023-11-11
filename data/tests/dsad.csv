@@ -1,0 +1,11 @@
+	Model A	Model B	Model C
+0	direct_rad:W	direct_rad:W	direct_rad:W
+1	effective_cloud_cover:p	effective_cloud_cover:p	effective_cloud_cover:p
+2	derivative_sun_azimuth:d_d	clear_sky_rad:W	clear_sky_rad:W
+3	clear_sky_rad:W	derivative_sun_azimuth:d_d	derivative_sun_azimuth:d_d
+4	hour:hour	hour:hour	hour:hour
+5	log_diffuse_rad:W	day_of_year:day	day_of_year:day
+6	sun_elevation:d	integral_elevation:m_integral	log_diffuse_rad:W
+7	integral_elevation:m_integral	filtered_freq_2_t_1000hPa:K	filtered_freq_2_t_1000hPa:K
+8	filtered_freq_2_t_1000hPa:K	log_diffuse_rad:W	sun_elevation:d
+9	day_of_year:day	sun_elevation:d	integral_elevation:m_integral
